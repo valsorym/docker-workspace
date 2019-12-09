@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="3.3.1"
+__version__="3.3.2"
 
 # CONSTANTS
 # Special constants:
@@ -51,7 +51,7 @@ fi
 #   ARCHITECTURE - additional files (docker-compose, entrypoint);
 #   MAKEBUILD - "on" automatic build after saving.
 _project=`printf "$WORKDIR" | sed 's/[^-\_0-9a-zA-Z]//g'`
-[ -z "$1" ] && IMAGE="debian:9.7" || IMAGE="$1"
+[ -z "$1" ] && IMAGE="debian:10.2" || IMAGE="$1"
 [ -z "$2" ] && PROJECT="$_project" || PROJECT="$2"
 [ -z "$3" ] && SSHPORT="2222" || SSHPORT="$3"
 [ -z "$4" ] && USERNAME="code" || USERNAME="$4"
