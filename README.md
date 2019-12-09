@@ -1,8 +1,6 @@
 # DOCKER WORKSPACE SANDBOX
 
-**Version:** 3.3.1
-
-**Status:** *test mode*
+**Version:** 3.3.2
 
 The docker environment workspace constructor. It is a special utility that is able to quickly create a docker environment based on any basic docker's images\*.  To the workspace can be accessed via SSH.
 
