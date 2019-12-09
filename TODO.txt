@@ -1,0 +1,8 @@
+[-] Fix the bug during the build of the image:
+    "debconf: delaying package configuration, since apt-utils is not installed";
+[+] Add DB supports;
+[+] Add packages support;
+[+] Add progress visualisation;
+[+] Save project's settings into temporary file.
+[+] Save project's settings into project directory.
+[+] Save and build the project.

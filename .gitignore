@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# ... but not the:
+!.gitignore
+!docker-workspace.sh
+!README.md
+!TODO.txt
