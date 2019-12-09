@@ -27,7 +27,7 @@ Make clone of the `workspace-sandbox` and  take `docker-workspace.sh` script onl
 ```
 $ cd /path/to/your/workspace/
 $ rm -Rf /tmp/docker-workspace && \
-  git clone git@github.com:valsorym/docker-workspace.git /tmp/workspace-sandbox && \
+  git clone git@github.com:valsorym/docker-workspace.git /tmp/docker-workspace && \
   cp /tmp/docker-workspace/docker-workspace.sh ./
 ```
 
