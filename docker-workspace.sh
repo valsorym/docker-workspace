@@ -664,6 +664,7 @@ FROM %%IMAGE%%
 # INSTALL
 # Installation of additional utilities.
 RUN apt-get update
+RUN apt-get -y install wget
 
 # REMOVE USER
 # The some docker's image has user with 1000 UID already (for example `node`).
@@ -694,19 +695,23 @@ RUN apt-get install -y sudo openssh-server && \
     new_loginuid="session optional pam_loginuid.so" && \
     sed "s@$old_loginuid@$loginuid@g" -i /etc/pam.d/sshd
 
-# TMUX
+# TMUX/LOCALE
 # The multiplexer for Unix-like operating systems.
 RUN apt-get install -y tmux locales && \
     sed -i -e "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen && \
     locale-gen
 
-ENV LANGUAGE en_US:en
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
+USER %%USERNAME%%
+RUN printf "%s\n" \
+           "export LANGUAGE=en_US:en" \
+           "export LC_ALL=en_US.UTF-8" \
+           "export LANG=en_US.UTF-8" \
+           "" >> /home/%%USERNAME%%/.bash_profile
 
 # PACKAGES
 # Any tools.
-RUN apt-get install -y wget %%PACKAGES%%
+USER root
+RUN apt-get install -y %%PACKAGES%%
 
 # GIT
 # The distributed version-control system.
@@ -715,27 +720,25 @@ RUN sudo apt-get install -y git && \
     git config --global user.email "%%EMAIL%%" && \
     git config --global user.name "%%USERNAME%%"
 
-# WORKDIRS
+
+# ARCHITECTURE
 # Create project structure.
 USER %%USERNAME%%
-RUN mkdir -p /home/%%USERNAME%%/workspace
-RUN echo "cd /home/%%USERNAME%%/workspace >& /dev/null" >> \
-    /home/%%USERNAME%%/.bash_profile
+ENV HOME /home/%%USERNAME%%
+ENV WORKSPACE ${HOME}/workspace
+RUN mkdir -p ${WORKSPACE}
+RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.bash_profile
 WORKDIR /home/%%USERNAME%%/workspace
-
-# CUSTOM INIT
-# Use this sector to initialize additional parameters.
-# P.s. To activate root - uncomment `USER root`.
-## USER root
 
 # ENTRYPOINT
 # Launch entrypoint script.
 USER root
 RUN printf "%s\n" \
-    "#!/bin/sh" \
-    "[ \$# -gt 0 ] && eval \"\$@\"" \
-    "exec /usr/sbin/sshd -D" \
-    "" > /usr/local/project/docker-entrypoint.sh
+           "#!/bin/sh" \
+           "[ \$# -gt 0 ] && eval \"\$@\"" \
+           "exec /usr/sbin/sshd -D" \
+           "" > /usr/local/project/docker-entrypoint.sh
+
 COPY Dockerfile docker-entrypoint.* /usr/local/project/
 RUN chmod +x /usr/local/project/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/project/docker-entrypoint.sh"]
