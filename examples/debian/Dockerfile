@@ -1,6 +1,6 @@
 # SSH Docker project
 # Doc: https://docs.docker.com/engine/examples/running_ssh_service/
-FROM golang:1.13.5-buster
+FROM debian:10.2
 
 # INSTALL
 # Installation of additional utilities.
@@ -66,10 +66,15 @@ RUN sudo apt-get install -y git && \
 USER code
 ENV HOME /home/code
 ENV WORKSPACE ${HOME}/workspace
-ENV GOPATH ${WORKSPACE}
 RUN mkdir -p ${WORKSPACE}
 
-RUN mkdir -p ${GOPATH}/src/app ${GOPATH}/bin && \
+ENV GOVERSION 1.13.5
+ENV GOPATH ${WORKSPACE}
+RUN mkdir -p /tmp/golang && cd /tmp/golang && \
+    wget https://dl.google.com/go/go${GOVERSION}.linux-amd64.tar.gz && \
+    sudo tar -C /usr/local -xzf go${GOVERSION}.linux-amd64.tar.gz && \
+    sudo ln -s /usr/local/go/bin/go /usr/bin/ && \
+    mkdir -p ${GOPATH}/src/app ${GOPATH}/bin && \
     printf "%s\n" \
            "export INSTALL_DIRECTORY=${GOPATH}/bin" \
            "export GOPATH=${GOPATH}" \

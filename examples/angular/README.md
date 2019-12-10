@@ -2,7 +2,8 @@
 
 Take a few steps to create your Angular2+ project.
 
-1. Just create a workspace based on `NodeJS` distributive, for example: `node:13.3.0-buster`. 
+1. Just create a workspace based on `NodeJS` image, for example: `node:13.3.0-buster`. 
+
 2. Open the `docker-compose.yaml` and change `app`->`ports` section as:
 ```
     ...
@@ -21,7 +22,7 @@ ENV HOME /home/code
 ENV WORKSPACE ${HOME}/workspace
 RUN mkdir -p ${WORKSPACE}
 RUN sudo npm install -g @angular/cli
-RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.bash_profile
+RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.profile
 WORKDIR /home/code/workspace
 ```
 
@@ -41,7 +42,7 @@ password: ***
          --style=scss --force basic
 ```
 
-P.s. If you opened this project for a test, then there is no need to create a project, just install the dependencies: `% mkdir -p node_modules && npm install`.
+*P.s. If you opened this project for a test, then there is no need to create a project, just install the dependencies: `% mkdir -p node_modules && npm install`.*
 
 7. Open the `angular.json` and add host data `"host": "0.0.0.0"` into `serve`->`options` section as:
 ```

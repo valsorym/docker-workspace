@@ -47,7 +47,7 @@ RUN printf "%s\n" \
            "export LANGUAGE=en_US:en" \
            "export LC_ALL=en_US.UTF-8" \
            "export LANG=en_US.UTF-8" \
-           "" >> /home/code/.bash_profile
+           "" >> /home/code/.profile
 
 # PACKAGES
 # Any tools.
@@ -68,7 +68,7 @@ USER code
 ENV HOME /home/code
 ENV WORKSPACE ${HOME}/workspace
 RUN mkdir -p ${WORKSPACE}
-RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.bash_profile
+RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.profile
 WORKDIR /home/code/workspace
 
 # ENTRYPOINT

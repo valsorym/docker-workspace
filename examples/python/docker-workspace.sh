@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="3.3.2"
+__version__="3.3.3"
 
 # CONSTANTS
 # Special constants:
@@ -706,7 +706,7 @@ RUN printf "%s\n" \
            "export LANGUAGE=en_US:en" \
            "export LC_ALL=en_US.UTF-8" \
            "export LANG=en_US.UTF-8" \
-           "" >> /home/%%USERNAME%%/.bash_profile
+           "" >> /home/%%USERNAME%%/.profile
 
 # PACKAGES
 # Any tools.
@@ -720,14 +720,13 @@ RUN sudo apt-get install -y git && \
     git config --global user.email "%%EMAIL%%" && \
     git config --global user.name "%%USERNAME%%"
 
-
 # ARCHITECTURE
 # Create project structure.
 USER %%USERNAME%%
 ENV HOME /home/%%USERNAME%%
 ENV WORKSPACE ${HOME}/workspace
 RUN mkdir -p ${WORKSPACE}
-RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.bash_profile
+RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.profile
 WORKDIR /home/%%USERNAME%%/workspace
 
 # ENTRYPOINT

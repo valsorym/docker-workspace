@@ -1,5 +1,5 @@
-IMAGE="golang:1.13.5-buster"
-PROJECT="golang"
+IMAGE="debian:10.2"
+PROJECT="debian"
 SSHPORT="2222"
 USERNAME="code"
 EMAIL="code@example.com"

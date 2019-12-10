@@ -1,8 +1,8 @@
-# GoLang Example
+# Debian Example
 
-Take a few steps to create your GoLang project.
+For example, we create a development environment on GoLang based on a Debian image.
 
-1. Just create a workspace based on `golang` image, for example: `golang:1.13.5`. 
+1. Just create a workspace based on `Debian` image, for example: `debian:10.2`. 
 
 2. Open the `docker-compose.yaml` and change `app`->`volumes` section as:
 ```
@@ -14,8 +14,7 @@ Take a few steps to create your GoLang project.
 
 3. Create the `src` directory and place the application's code there: 
 `$ mkdir -p src/ && touch src/main.go`
-
-*P.s. Add some code into `src/main.go`.*
+P.s. Add some code into `src/main.go`.
 
 4. Open the `Dockerfile` and change `ARCHITECTURE` section as:
 ```
@@ -24,10 +23,15 @@ Take a few steps to create your GoLang project.
 USER code
 ENV HOME /home/code
 ENV WORKSPACE ${HOME}/workspace
-ENV GOPATH ${WORKSPACE}
 RUN mkdir -p ${WORKSPACE}
 
-RUN mkdir -p ${GOPATH}/src/app ${GOPATH}/bin && \
+ENV GOVERSION 1.13.5
+ENV GOPATH ${WORKSPACE}
+RUN mkdir -p /tmp/golang && cd /tmp/golang && \
+    wget https://dl.google.com/go/go${GOVERSION}.linux-amd64.tar.gz && \
+    sudo tar -C /usr/local -xzf go${GOVERSION}.linux-amd64.tar.gz && \
+    sudo ln -s /usr/local/go/bin/go /usr/bin/ && \
+    mkdir -p ${GOPATH}/src/app ${GOPATH}/bin && \
     printf "%s\n" \
            "export INSTALL_DIRECTORY=${GOPATH}/bin" \
            "export GOPATH=${GOPATH}" \
