@@ -1,8 +1,9 @@
-# Ignore everything
-*
+/examples/angular/node_modules
+!/examples/angular/node_modules/.gitkeep
 
-# ... but not the:
-!.gitignore
-!docker-workspace.sh
-!README.md
-!TODO.txt
+/examples/golang/src/vendor
+!/examples/golang/src/vendor/.gitkeep
+
+/examples/python/venv
+!/examples/python/venv/.gitkeep
+

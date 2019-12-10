@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="3.3.3"
+__version__="3.3.2"
 
 # CONSTANTS
 # Special constants:

@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  app:
+    image: workspace/node:13.3.0-buster-angular
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "2222:22"
+      - "8800:4200"
+    volumes:
+      - .:/home/code/workspace
+    networks:
+      - angular
+
+networks:
+  angular:

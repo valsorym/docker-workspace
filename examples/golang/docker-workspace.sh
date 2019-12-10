@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="3.3.3"
+__version__="3.3.2"
 
 # CONSTANTS
 # Special constants:
@@ -726,7 +726,7 @@ RUN sudo apt-get install -y git && \
 USER %%USERNAME%%
 ENV HOME /home/%%USERNAME%%
 ENV WORKSPACE ${HOME}/workspace
-RUN mkdir -p ${WORKSPACE}
+RUN mkdir -p /home/%%USERNAME%%/workspace
 RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.bash_profile
 WORKDIR /home/%%USERNAME%%/workspace
 
