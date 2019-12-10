@@ -1,9 +1,9 @@
 /examples/angular/node_modules
-!/examples/angular/node_modules/.gitkeep
+!.gitkeep
 
 /examples/golang/src/vendor
-!/examples/golang/src/vendor/.gitkeep
+!.gitkeep
 
 /examples/python/venv
-!/examples/python/venv/.gitkeep
+!.gitkeep
 
