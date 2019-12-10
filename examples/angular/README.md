@@ -40,6 +40,9 @@ password: ***
 % ng new --directory ./ --minimal --routing --skip-git \
          --style=scss --force basic
 ```
+
+P.s. If you opened this project for a test, then there is no need to create a project, just install the dependencies: `% mkdir -p node_modules && npm install`.
+
 7. Open the `angular.json` and add host data `"host": "0.0.0.0"` into `serve`->`options` section as:
 ```
 ...
