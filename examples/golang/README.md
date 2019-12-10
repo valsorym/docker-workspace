@@ -20,7 +20,7 @@ Take a few steps to create your GoLang project.
 4. Open the `Dockerfile` and change `ARCHITECTURE` section as:
 ```
 # ARCHITECTURE
-# Create project structure.
+# Create structure of the workspace.
 USER code
 ENV HOME /home/code
 ENV WORKSPACE ${HOME}/workspace

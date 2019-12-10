@@ -60,7 +60,7 @@ _project=`printf "$WORKDIR" | sed 's/[^-\_0-9a-zA-Z]//g'`
 
 DATABASES="" #"redis"
 ARCHITECTURE="docker-compose.yaml" #"docker-compose.yaml docker-hotinit.sh"
-PACKAGES="" #"htop"
+PACKAGES="inotify-tools wget" # "htop"
 MAKEBUILD="off"
 
 # BACKTITLE
@@ -270,13 +270,20 @@ changevalue() {
 
 changepackages() {
   # Dialog for change additional tools.
-  # Available: vifm, mc, htop
+  inotify_tools_status="off"
+  wget_status="off"
+  curl_status="off"
+  unzip_status="off"
+  vim_status="off"
+  neovim_status="off"
+  rcconf_status="off"
   vifm_status="off"
   mc_status="off"
   htop_status="off"
   for package in $PACKAGES
   do
-    eval "${package}_status=\"on\""
+    pkg=`echo "$package" | sed 's/-/_/g'`
+    eval "${pkg}_status=\"on\""
   done
 
   $WINDOW \
@@ -286,14 +293,35 @@ changepackages() {
     --checklist \
     "\nYou can install additional tools in your project." \
     16 78 8 \
+      "inotify-tools" \
+        "Simple interface to inotify" \
+        $inotify_tools_status \
+      "rcconf" \
+        "Debian Runlevel configuration tool" \
+        $rcconf_status \
+      "wget" \
+        "Retrieves files from the web" \
+        $wget_status \
+      "curl" \
+        "Tool for transferring data with URL syntax" \
+        $curl_status \
+      "unzip" \
+        "De-archiver for .zip files" \
+        $unzip_status \
+      "vim" \
+        "Vi IMproved - enhanced vi editor" \
+        $vim_status \
+      "neovim" \
+        "Heavily refactored vim fork" \
+        $neovim_status \
       "htop" \
-        "The interactive system-monitor/process-viewer" \
+        "Interactive processes viewer" \
         $htop_status \
       "vifm" \
         "The file manager with VI interface" \
         $vifm_status \
       "mc" \
-        "The free cross-platform orthodox file manager             " \
+        "The free cross-platform orthodox file manager    " \
         $mc_status \
     2> $OUTBUFFER
 
@@ -688,17 +716,22 @@ RUN apt-get install -y sudo && \
 
 # SSHD
 # The pam_loginuid - login fix (otherwise user is kicked off after login).
-RUN apt-get install -y sudo openssh-server && \
+RUN apt-get -y install openssh-server && \
     echo "%%USERNAME%%:%%PASSWORD%%" | chpasswd && \
     echo "export VISIBLE=now" >> /etc/profile && \
     old_loginuid="session\s*required\s*pam_loginuid.so" && \
     new_loginuid="session optional pam_loginuid.so" && \
     sed "s@$old_loginuid@$loginuid@g" -i /etc/pam.d/sshd
 
-# TMUX/LOCALE
-# The multiplexer for Unix-like operating systems.
-RUN apt-get install -y tmux locales && \
-    sed -i -e "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen && \
+# PACKAGES
+# Any tools.
+USER root
+RUN apt-get -y install %%PACKAGES%%
+
+# LOCALE SETTINGS
+# Set en_US.UTF-8 as default. 
+USER root
+RUN sed -i -e "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen && \
     locale-gen
 
 USER %%USERNAME%%
@@ -708,26 +741,14 @@ RUN printf "%s\n" \
            "export LANG=en_US.UTF-8" \
            "" >> /home/%%USERNAME%%/.profile
 
-# PACKAGES
-# Any tools.
-USER root
-RUN apt-get install -y %%PACKAGES%%
-
-# GIT
-# The distributed version-control system.
-USER %%USERNAME%%
-RUN sudo apt-get install -y git && \
-    git config --global user.email "%%EMAIL%%" && \
-    git config --global user.name "%%USERNAME%%"
-
 # ARCHITECTURE
-# Create project structure.
+# Create structure of the workspace.
 USER %%USERNAME%%
 ENV HOME /home/%%USERNAME%%
 ENV WORKSPACE ${HOME}/workspace
 RUN mkdir -p ${WORKSPACE}
 RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.profile
-WORKDIR /home/%%USERNAME%%/workspace
+WORKDIR ${WORKSPACE}
 
 # ENTRYPOINT
 # Launch entrypoint script.
@@ -745,7 +766,8 @@ EOF
 progress 20
 
 # Change Dockerfile parameters.
-[ -z "$PACKAGES" ] && PACKAGES="vim" || PACKAGES="vim $PACKAGES"
+# Add `locales` package as required.
+[ -z "$PACKAGES" ] && PACKAGES="locales" || PACKAGES="locales $PACKAGES"
 sed                                                                         \
     -e 's#%%IMAGE%%#'"$IMAGE"'#g;'                                          \
     -e 's#%%USERNAME%%#'"$USERNAME"'#g;'                                    \

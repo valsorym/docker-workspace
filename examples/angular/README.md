@@ -16,14 +16,14 @@ Take a few steps to create your Angular2+ project.
 3. Open the `Dockerfile` and the `RUN sudo npm install -g @angular/cli` into `ARCHITECTURE` section as:
 ```
 # ARCHITECTURE
-# Create project structure.
+# Create structure of the workspace.
 USER code
 ENV HOME /home/code
 ENV WORKSPACE ${HOME}/workspace
 RUN mkdir -p ${WORKSPACE}
 RUN sudo npm install -g @angular/cli
 RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.profile
-WORKDIR /home/code/workspace
+WORKDIR ${WORKSPACE}
 ```
 
 4. Make build of the container:
