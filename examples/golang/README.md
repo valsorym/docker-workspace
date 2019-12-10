@@ -2,7 +2,7 @@
 
 Take a few steps to create your GoLang project.
 
-1. Just create a workspace based on `golang` image, for example: `golang:1.13.5`. 
+1. Just create a workspace based on `golang` image, for example: `golang:1.13.5-buster`.
 
 2. Open the `docker-compose.yaml` and change `app`->`volumes` section as:
 ```
