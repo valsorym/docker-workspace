@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="4.1.0"
+__version__="4.2.0"
 
 # CONSTANTS
 # Special constants:
@@ -741,10 +741,11 @@ RUN printf "%s\n" \
 # Create structure of the workspace.
 USER %%USERNAME%%
 ENV HOME /home/%%USERNAME%%
-ENV WORKSPACE ${HOME}/workspace
-RUN mkdir -p ${WORKSPACE}
-RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.profile
-WORKDIR ${WORKSPACE}
+ENV WORKSPACE $HOME/workspace
+RUN mkdir -p $WORKSPACE
+RUN echo "cd $WORKSPACE >& /dev/null" >> $HOME/.profile && \
+    echo "export WORKSPACE=$WORKSPACE" >> ~/.profile
+WORKDIR $WORKSPACE
 
 # INJECTION
 # Additional environment settings.
