@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="3.3.5"
+__version__="4.0.0"
 
 # CONSTANTS
 # Special constants:
@@ -696,7 +696,7 @@ FROM %%IMAGE%%
 # INSTALL
 # Installation of additional utilities.
 RUN apt-get update
-RUN apt-get -y install wget
+RUN apt-get -y install locales sudo openssh-server %%PACKAGES%%
 
 # REMOVE USER
 # The some docker's image has user with 1000 UID already (for example `node`).
@@ -708,8 +708,7 @@ RUN asshole=`grep '1000' /etc/passwd | cut -d\: -f1`; \
 # Allows users to run programs with the security privileges of another user,
 # by default the superuser.
 RUN mkdir -p /var/run/sshd /usr/local/project
-RUN apt-get install -y sudo && \
-    groupadd --gid 1000 %%USERNAME%% && \
+RUN groupadd --gid 1000 %%USERNAME%% && \
     useradd --uid 1000 \
             --gid %%USERNAME%% \
             --shell /bin/bash \
@@ -720,21 +719,14 @@ RUN apt-get install -y sudo && \
 
 # SSHD
 # The pam_loginuid - login fix (otherwise user is kicked off after login).
-RUN apt-get -y install openssh-server && \
-    echo "%%USERNAME%%:%%PASSWORD%%" | chpasswd && \
+RUN echo "%%USERNAME%%:%%PASSWORD%%" | chpasswd && \
     echo "export VISIBLE=now" >> /etc/profile && \
     old_loginuid="session\s*required\s*pam_loginuid.so" && \
     new_loginuid="session optional pam_loginuid.so" && \
     sed "s@$old_loginuid@$loginuid@g" -i /etc/pam.d/sshd
 
-# PACKAGES
-# Any tools.
-USER root
-RUN apt-get -y install %%PACKAGES%%
-
 # LOCALE SETTINGS
 # Set en_US.UTF-8 as default. 
-USER root
 RUN sed -i -e "s/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/" /etc/locale.gen && \
     locale-gen
 
@@ -754,6 +746,11 @@ RUN mkdir -p ${WORKSPACE}
 RUN echo "cd ${WORKSPACE} >& /dev/null" >> ${HOME}/.profile
 WORKDIR ${WORKSPACE}
 
+# INJECTION
+# Additional environment settings.
+# USER %%USERNAME%% # root
+# ...
+
 # ENTRYPOINT
 # Launch entrypoint script.
 USER root
@@ -770,8 +767,8 @@ EOF
 progress 20
 
 # Change Dockerfile parameters.
-# Add `locales` package as required.
-[ -z "$PACKAGES" ] && PACKAGES="locales" || PACKAGES="locales $PACKAGES"
+## # Add `locales` package as required.
+## [ -z "$PACKAGES" ] && PACKAGES="locales" || PACKAGES="locales $PACKAGES"
 sed                                                                         \
     -e 's#%%IMAGE%%#'"$IMAGE"'#g;'                                          \
     -e 's#%%USERNAME%%#'"$USERNAME"'#g;'                                    \
