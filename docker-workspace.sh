@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="4.0.0"
+__version__="4.1.0"
 
 # CONSTANTS
 # Special constants:
@@ -696,7 +696,7 @@ FROM %%IMAGE%%
 # INSTALL
 # Installation of additional utilities.
 RUN apt-get update
-RUN apt-get -y install locales sudo openssh-server %%PACKAGES%%
+RUN apt-get -y install locales build-essential sudo openssh-server %%PACKAGES%%
 
 # REMOVE USER
 # The some docker's image has user with 1000 UID already (for example `node`).
@@ -748,7 +748,7 @@ WORKDIR ${WORKSPACE}
 
 # INJECTION
 # Additional environment settings.
-# USER %%USERNAME%% # root
+# USER %%USERNAME%%
 # ...
 
 # ENTRYPOINT
