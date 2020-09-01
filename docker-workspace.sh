@@ -7,7 +7,7 @@
 #   valsorym <valsorym.e@gmail.com>
 
 # ACTUAL VERSION
-__version__="3.3.3"
+__version__="3.3.5"
 
 # CONSTANTS
 # Special constants:
@@ -51,7 +51,7 @@ fi
 #   ARCHITECTURE - additional files (docker-compose, entrypoint);
 #   MAKEBUILD - "on" automatic build after saving.
 _project=`printf "$WORKDIR" | sed 's/[^-\_0-9a-zA-Z]//g'`
-[ -z "$1" ] && IMAGE="debian:10.2" || IMAGE="$1"
+[ -z "$1" ] && IMAGE="debian:10.5" || IMAGE="$1"
 [ -z "$2" ] && PROJECT="$_project" || PROJECT="$2"
 [ -z "$3" ] && SSHPORT="2222" || SSHPORT="$3"
 [ -z "$4" ] && USERNAME="code" || USERNAME="$4"
@@ -60,7 +60,7 @@ _project=`printf "$WORKDIR" | sed 's/[^-\_0-9a-zA-Z]//g'`
 
 DATABASES="" #"redis"
 ARCHITECTURE="docker-compose.yaml" #"docker-compose.yaml docker-hotinit.sh"
-PACKAGES="inotify-tools wget" # "htop"
+PACKAGES="inotify-tools curl" # "wget htop"
 MAKEBUILD="off"
 
 # BACKTITLE
@@ -280,6 +280,7 @@ changepackages() {
   vifm_status="off"
   mc_status="off"
   htop_status="off"
+  git_status="off"
   for package in $PACKAGES
   do
     pkg=`echo "$package" | sed 's/-/_/g'`
@@ -299,6 +300,9 @@ changepackages() {
       "rcconf" \
         "Debian Runlevel configuration tool" \
         $rcconf_status \
+      "git" \
+        "Is a distributed version-control system" \
+        $git_status \
       "wget" \
         "Retrieves files from the web" \
         $wget_status \
